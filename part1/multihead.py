@@ -21,18 +21,18 @@ class MultiHeadAttention(nn.Module):
       merge:  (B, T, n_head*d_head) = (B, T, d_model)
     """
     def __init__(self,d_model:int,n_head:int,dropout:float=0.0, trace_shapes:bool=True):
-        super.__init__()
+        super().__init__()
         assert d_model%n_head==0,"d_model must be divisible by n_head"  #must be satisfied
-        d_model=self.d_model
-        n_head=self.n_head
-        d_head=d_model//n_head
+        
+        self.n_head=n_head
+        self.d_head=d_model//n_head
         self.qkv = nn.Linear(d_model, 3 * d_model, bias=False)
         self.proj = nn.Linear(d_model, d_model, bias=False)
         self.dropout = nn.Dropout(dropout)
         self.trace_shapes = trace_shapes
 
     def forward(self,x:torch.tensor):
-        B,T,C=x.shapes
+        B,T,C=x.shape
         B, T, C = x.shape
         qkv = self.qkv(x)                          # (B,T,3*C)
         qkv = qkv.view(B, T, 3, self.n_head, self.d_head) #similar to reshape but is faster and requires contigous allocation
@@ -47,7 +47,7 @@ class MultiHeadAttention(nn.Module):
         score=1.0/math.sqrt(self.d_head)
         attn=torch.matmul(q,k.transpose(-2,-1))*score
         mask=attention_mask(T=T,device=x.device)
-        attn=attn.masked_fill(mask,float('inf'))
+        attn=attn.masked_fill(mask,float('-inf'))
         w=F.softmax(attn,dim=-1)
         w=self.dropout(w)
         ctx=torch.matmul(w,v)

@@ -49,11 +49,9 @@ def main():
     run("python attn_numpy_demo.py")
 
     # 1.3/1.4 unit tests
-    run("python -m pytest -q tests/test_attn_math.py")
+    run("python -m pytest -q tests/test_attn_mask.py")
     run("python -m pytest -q tests/test_causal_mask.py")
 
-    # Matrix math walkthrough for MHA
-    run("python demo_mha_shapes.py")
 
     if args.visualize:
         run("python demo_visualize_multi_head.py")

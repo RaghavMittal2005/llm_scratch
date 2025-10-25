@@ -5,7 +5,7 @@ import torch
 
 class TransformerBlock(nn.Module):
     def __init__(self,d_model:int,n_head:int,dropout:int=0):
-        super.__init__()
+        super().__init__()
         self.ln1=nn.LayerNorm(d_model)
         self.attn=MultiHeadAttention(d_model,n_head,dropout)
         self.ln2=nn.LayerNorm(d_model)
