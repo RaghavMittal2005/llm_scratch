@@ -1,6 +1,5 @@
-import torch
 from __future__ import annotations
-
+import torch
 class ByteTokeniser:
     """
     uses simple utf-8 encoding byte wise for encoding

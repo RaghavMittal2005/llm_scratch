@@ -1,12 +1,11 @@
-import torch
 from __future__ import annotations
-
+import torch
 from pathlib import Path
 class ByteDataset:
     """
     block size :sequence length
     split:train &eval ratio"""
-    def enco(self,path:str,block_size:int=256,split:float=0.9):
+    def __init__(self,path:str,block_size:int=256,split:float=0.9):
         data=Path(path).read_bytes()
         data=torch.tensor(list(data),dtype=torch.long)
         n=int(len(data)*split)

@@ -3,7 +3,7 @@ import math
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-
+from utils import top_k_top_p_filtering
 # ---- Blocks (self-contained for isolation) ----
 class CausalSelfAttention(nn.Module):
     def __init__(self, n_embd: int, n_head: int, dropout: float = 0.0):
@@ -105,6 +105,7 @@ class GPT(nn.Module):
             idx_cond = idx[:, -self.block_size:]
             logits, _ = self(idx_cond)
             logits=logits[:,-1,:]/max(temperature,1e-6)
+            logits=top_k_top_p_filtering(logits,top_k,top_p)
             probs=torch.softmax(logits,dim=-1)
 
             next_id=torch.multinomial(probs,num_samples=1)
