@@ -37,9 +37,9 @@ if __name__ == "__main__":
     args = p.parse_args()
 
     # 1) run unit tests
-    run("python -m pytest -q tests/test_rmsnorm.py")
+    run("python -m pytest -q tests/test_rmsprop.py")
     run("python -m pytest -q tests/test_rope_apply.py")
-    run("python -m pytest -q tests/test_kvcache_shapes.py")
+    run("python -m pytest -q tests/test_kv_shapes.py")
 
     # 2) (optional) generation demo
     if args.demo:

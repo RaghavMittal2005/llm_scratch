@@ -10,7 +10,7 @@ class RopeCache:
         self.max_pos = max_pos
         self.base = base
         self.device = device if device is not None else torch.device('cpu')
-
+        self._build(max_pos)
     def _build(self,max_pos:int):
         self.max_pos = max_pos
         inv_freq = 1.0 / (10000.0 ** (torch.arange(0, self.head_dim, 2, device=self.device).float() / self.head_dim))

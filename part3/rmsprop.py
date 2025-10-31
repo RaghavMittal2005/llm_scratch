@@ -10,6 +10,7 @@ class RMSPROP(nn.Module):
         self.weight=nn.Parameter(torch.ones(dim))
 
     def forward(self,x:torch.Tensor)->torch.Tensor:
-        rms=torch.sqrt(torch.mean(x**2,dim=-1)+self.eps)
-        return x*self.weight/rms
+        rms=x.pow(2).mean(dim=-1, keepdim=True).add(self.eps).sqrt()
+        print(rms)
+        return (x/rms)*self.weight
         
