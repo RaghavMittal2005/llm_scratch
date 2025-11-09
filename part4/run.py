@@ -47,3 +47,6 @@ if __name__ == "__main__":
         run("python sample.py --ckpt runs/part4-demo/model_last.pt --tokens 100 --prompt 'Generate a short story'")
 
     print("\nPart 4 checks complete. ✅")
+    print("You can now run the demo with: python orchestrator.py --demo")
+    print("You can now run the demo with: python orchestrator.py --demo")
+    print('Ramcharan Ki maa ki chhot')
