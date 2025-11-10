@@ -1,8 +1,8 @@
 from __future__ import annotations
 import torch
 import torch.nn as nn
-from blocks import Transformerblock
-from tokenizer import ByteTokenizer
+from .blocks import Transformerblock
+from .tokenizer import ByteTokenizer
 
 # Get the absolute path to the folder that contains part_2 and part_3
 import os, sys

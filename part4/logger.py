@@ -2,7 +2,7 @@ from __future__ import annotations
 import torch
 import time
 from pathlib import Path
-
+from typing import Any,Optional,Dict
 class Nooplogger:
     """A logger in case of no logging"""
     def close(self):
@@ -44,7 +44,7 @@ class TensorboardLogger:
         if self.w is None:return
         for k ,v in kv.items():
             if isinstance(k,str) or k.startswith('text/'):
-                self.w.add_text(k[5:],global_step=step)
+                self.w.add_text(k[5:],str(v),global_step=step)
             
             try:
                 import numpy as np
@@ -70,7 +70,7 @@ class TensorboardLogger:
                 self.w.add_scalar(k,float(v),global_step=step)
             except Exception as e:
                 pass
-    def hist(self, tag: str, values: any, step: int |None, bins: str = "tensorflow"):
+    def hist(self, tag: str, values: Any, step: int |None, bins: str = "tensorflow"):
         if self.w is None:return
         try:
             if isinstance(values,torch.Tensor):
@@ -83,7 +83,7 @@ class TensorboardLogger:
     def text(self,tag:str,text:str,step=int|None):
         if self.w is None:return
         try:
-            self.w.add_text(tag,text,step)
+            self.w.add_text(global_step=step,tag=tag,text_string=text)
         except Exception:
             pass
     def image(self, tag: str, img, step: int|None):
@@ -106,7 +106,7 @@ class TensorboardLogger:
         except Exception:
             pass  # graph tracing can fail depending on model control flow; don't crash
 
-    def hparams(self, hparams: dict[str, any], metrics_once: dict[str, float]|None=None):
+    def hparams(self, hparams: Dict[str, Any], metrics_once: Dict[str, float]|None=None):
         if not self.w or self.hparams_logged:
             return
         try:

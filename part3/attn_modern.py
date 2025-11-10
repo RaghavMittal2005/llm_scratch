@@ -2,8 +2,8 @@ from __future__ import annotations
 import math, torch
 import torch.nn as nn
 import torch.nn.functional as F
-from rope_cache import RopeCache,apply_single_rope
-from kv_cache import KVCache  # your existing class
+from .rope_cache import RopeCache,apply_single_rope
+from .kv_cache import KVCache  # your existing class
 
 class CausalSelfAttentionModern(nn.Module):
     def __init__(self, n_embd: int, n_head: int, dropout: float = 0.0,

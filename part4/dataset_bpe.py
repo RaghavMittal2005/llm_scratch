@@ -10,7 +10,7 @@ class BPEByteDataset(Dataset):
         super().__init__()
         self.block_Size=block_size
         data=Path(path).read_text(encoding="utf-8")
-        self.ids=torch.Tensor(tokenizer.encode(data),dtype=torch.long)
+        self.ids=torch.tensor(tokenizer.encode(data),dtype=torch.long)
 
     def __len__(self):
         return len(self.ids)-(self.block_Size+1)
@@ -18,7 +18,7 @@ class BPEByteDataset(Dataset):
         x=self.ids[i:self.block_Size+i]
         y=self.ids[i+1:self.block_Size+i+1]
         return x,y
-def make_loader(path:str,tokeniser:BPETokenizer,batch_Size:int,block_size:int=256):
+def make_loader(path:str,tokeniser:BPETokenizer,batch_Size:int,block_size:int=256,shuffle:bool=True):
 
     ds=BPEByteDataset(path,tokeniser,block_size)
     return torch.utils.data.DataLoader(ds,batch_size=batch_Size,shuffle=True,drop_last=True)
