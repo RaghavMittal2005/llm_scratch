@@ -1,6 +1,6 @@
 from __future__ import annotations
 import torch, torch.nn as nn
-
+import torch.nn.functional as F
 class TopKGate(nn.Module):
     """Topk softmax gating with Switch-style loadbalancing aux loss.
     Args:
@@ -15,7 +15,7 @@ class TopKGate(nn.Module):
     """
     def __init__(self,dim:int,n_expert:int,k:int=1):
         super().__init__()
-        assert k>=1 and  k<n_expert
+        assert k>=1 and  k<=n_expert
         self.dim=dim
         self.n_expert=n_expert
         self.k=k
@@ -23,15 +23,17 @@ class TopKGate(nn.Module):
 
     def forward(self,x:torch.Tensor):
         logits=self.w_g(x)
-        prob=nn.Softmax(logits,dim=-1)
+        prob=torch.softmax(logits,dim=-1)
         topk,topids=torch.topk(prob,k=self.k,dim=-1)
         S=prob.size(0)
+        E=prob.size(1)
         importance=prob.mean(dim=0)
-        hard_1=topk[:,0]
-
-        load=torch.zeros(S,self.n_expert)
+        hard_1=topids[:,0]
+        normalized_weights=topk/topk.sum(dim=-1,keepdim=True)
+        load=torch.zeros(E,device=x.device)
         load.scatter_add_(0,hard_1,torch.ones_like(hard_1,dtype=load.dtype))
-        load=load/max(S,1)
-        aux_loss=(self.n_expert(importance*load)).sum()
+        load=load/S
+        aux_loss=(E*(importance*load)).sum()
         print(importance,load,aux_loss)
+        return topids,normalized_weights,aux_loss
 
