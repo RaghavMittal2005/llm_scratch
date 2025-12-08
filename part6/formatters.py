@@ -17,5 +17,5 @@ template = (
 def format_example(ex:Example)->str:
     return template.format(instruction=ex.instruction.strip(),response=ex.response.strip())
 
-def format_prompt(ex:Example)->str:
-    return template.format(instruction=ex.instruction.strip(),response="")
+def format_prompt(ex:str)->str:
+    return template.format(instruction=ex.strip(),response="")

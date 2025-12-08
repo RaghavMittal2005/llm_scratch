@@ -11,9 +11,9 @@ class CurriculumLength:
         self._i=0
         return self
     def __next__(self):
-        if self._i>len(self.items):
+        if self._i>=len(self.items):
             raise StopIteration
-        item=self.item[self._i]
+        item=self.items[self._i]
         self._i+=1
         return item
         
