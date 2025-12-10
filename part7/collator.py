@@ -1,8 +1,13 @@
 from __future__ import annotations
 from typing import List, Tuple
 import torch
+
+# Prefer BPE from Part 4, else ByteTokenizer from Part 3
 import sys
 from pathlib import Path as _P
+
+sys.path.append(str(_P(__file__).resolve().parents[1]/'part_4'))
+
 sys.path.append(str(_P(__file__).resolve().parent.parent))
 try:
     from part4.tokeniser_bpe import BPETokenizer
@@ -17,7 +22,7 @@ except Exception:
 
 sys.path.append(str(_P(__file__).resolve().parents[1]/'part_6'))
 try:
-    from part6.formatters import Example, format_example # reuse formatting
+    from part6.formatters import Example, format_example  # reuse formatting
 except Exception:
     pass
 
@@ -50,15 +55,13 @@ class PairCollator:
             if isinstance(ids, torch.Tensor):
                 ids = ids.tolist()
             return ids
-        return List(text.encode('utf-8'))
+        return list(text.encode('utf-8'))
 
     def collate(self, batch: List[Tuple[str, str, str]]):
         # batch of (prompt, chosen, rejected)
         pos_ids, neg_ids = [], []
         for prompt, chosen, rejected in batch:
-            print(f"  Formatting positive example...")
             pos_text = format_example(Example(prompt, chosen))
-            print(f"  Positive text length: {len(pos_text)}")
             neg_text = format_example(Example(prompt, rejected))
             pos_ids.append(self._encode(pos_text)[:self.block_size])
             neg_ids.append(self._encode(neg_text)[:self.block_size])

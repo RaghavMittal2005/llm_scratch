@@ -1,6 +1,6 @@
 from __future__ import annotations
 import argparse, torch
-from data_pref import load_ds
+from data_pref import load_preferences
 from collator import PairCollator
 from reward import RewardModel
 
@@ -15,8 +15,8 @@ def main():
 
     device = torch.device('cuda' if torch.cuda.is_available() and not args.cpu else 'cpu')
 
-    items = load_ds(split=args.split)
-    triples = [(it.prompt, it.chosen, it.reject) for it in items]
+    items = load_preferences(split=args.split)
+    triples = [(it.prompt, it.chosen, it.rejected) for it in items]
 
     col = PairCollator(block_size=256, bpe_dir=args.bpe_dir)
     ckpt = torch.load(args.ckpt, map_location=device)
