@@ -9,13 +9,6 @@ conda create -n llm_from_scratch python=3.11
 conda activate llm_from_scratch
 pip install -r requirements.txt
 ```
-
-
-
-### Part 0 — Foundations & Mindset
-- High-level LLM training pipeline: pretraining → fine-tuning → alignment
-- Hardware & software setup (PyTorch, CUDA/MPS, mixed precision, profiling)
-
 ### Part 1 — Core Transformer Architecture
 - Positional embeddings: absolute learned vs. sinusoidal
 - Self-attention from first principles, with a manual worked example
