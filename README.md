@@ -10,9 +10,7 @@ conda activate llm_from_scratch
 pip install -r requirements.txt
 ```
 
----
 
-## Curriculum
 
 ### Part 0 — Foundations & Mindset
 - High-level LLM training pipeline: pretraining → fine-tuning → alignment
